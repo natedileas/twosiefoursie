@@ -4,10 +4,11 @@
     By Дмитрий Фомин (Dmitry Fomin) - Own work, CC0, https://commons.wikimedia.org/w/index.php?curid=56604089
  -->
 <html>
-    <head>
-        <style>
-            html,
-            body {
+
+<head>
+    <style>
+        html,
+        body {
             width: 100%;
             height: 100%;
             margin: 0px;
@@ -16,239 +17,278 @@
             /*  Disable scrollbars */
             display: block;
             /* No floating content on sides */
+        }
+
+        button {
+            width: 10%;
+            height: 10%;
+            font: 20px Georgia;
+            position: absolute;
+            top: 2%;
+        }
+
+        #draw {
+            left: 15%;
+        }
+
+        #discard2 {
+            left: 35%
+        }
+
+        #discard4 {
+            left: 55%;
+        }
+
+        #newgame {
+            left: 75%;
+        }
+
+        .cardsrc {
+            display: none;
+        }
+    </style>
+</head>
+
+<body onload="window_resize()">
+    <button id="draw" onclick="draw()">Draw 1</button>
+    <button id="discard2" onclick="discard2()">Discard Inner 2</button>
+    <button id="discard4" onclick="discard4()">Discard All 4</button>
+    <button id="newgame" onclick="setup_new_game()">New Game</button>
+    <canvas id="maincanvas"></canvas>
+    <img id="card-hearts-1" src="cards/hearts_ace.svg" class="cardsrc"></img>
+    <img id="card-spades-1" src="cards/spades_ace.svg" class="cardsrc"></img>
+    <img id="card-clubs-1" src="cards/clubs_ace.svg" class="cardsrc"></img>
+    <img id="card-diamonds-1" src="cards/diamonds_ace.svg" class="cardsrc"></img>
+    <img id="card-hearts-2" src="cards/hearts_2.svg" class="cardsrc"></img>
+    <img id="card-spades-2" src="cards/spades_2.svg" class="cardsrc"></img>
+    <img id="card-clubs-2" src="cards/clubs_2.svg" class="cardsrc"></img>
+    <img id="card-diamonds-2" src="cards/diamonds_2.svg" class="cardsrc"></img>
+    <img id="card-hearts-3" src="cards/hearts_3.svg" class="cardsrc"></img>
+    <img id="card-spades-3" src="cards/spades_3.svg" class="cardsrc"></img>
+    <img id="card-clubs-3" src="cards/clubs_3.svg" class="cardsrc"></img>
+    <img id="card-diamonds-3" src="cards/diamonds_3.svg" class="cardsrc"></img>
+    <img id="card-hearts-4" src="cards/hearts_4.svg" class="cardsrc"></img>
+    <img id="card-spades-4" src="cards/spades_4.svg" class="cardsrc"></img>
+    <img id="card-clubs-4" src="cards/clubs_4.svg" class="cardsrc"></img>
+    <img id="card-diamonds-4" src="cards/diamonds_4.svg" class="cardsrc"></img>
+    <img id="card-hearts-5" src="cards/hearts_5.svg" class="cardsrc"></img>
+    <img id="card-spades-5" src="cards/spades_5.svg" class="cardsrc"></img>
+    <img id="card-clubs-5" src="cards/clubs_5.svg" class="cardsrc"></img>
+    <img id="card-diamonds-5" src="cards/diamonds_5.svg" class="cardsrc"></img>
+    <img id="card-hearts-6" src="cards/hearts_6.svg" class="cardsrc"></img>
+    <img id="card-spades-6" src="cards/spades_6.svg" class="cardsrc"></img>
+    <img id="card-clubs-6" src="cards/clubs_6.svg" class="cardsrc"></img>
+    <img id="card-diamonds-6" src="cards/diamonds_6.svg" class="cardsrc"></img>
+    <img id="card-hearts-7" src="cards/hearts_7.svg" class="cardsrc"></img>
+    <img id="card-spades-7" src="cards/spades_7.svg" class="cardsrc"></img>
+    <img id="card-clubs-7" src="cards/clubs_7.svg" class="cardsrc"></img>
+    <img id="card-diamonds-7" src="cards/diamonds_7.svg" class="cardsrc"></img>
+    <img id="card-hearts-8" src="cards/hearts_8.svg" class="cardsrc"></img>
+    <img id="card-spades-8" src="cards/spades_8.svg" class="cardsrc"></img>
+    <img id="card-clubs-8" src="cards/clubs_8.svg" class="cardsrc"></img>
+    <img id="card-diamonds-8" src="cards/diamonds_8.svg" class="cardsrc"></img>
+    <img id="card-hearts-9" src="cards/hearts_9.svg" class="cardsrc"></img>
+    <img id="card-spades-9" src="cards/spades_9.svg" class="cardsrc"></img>
+    <img id="card-clubs-9" src="cards/clubs_9.svg" class="cardsrc"></img>
+    <img id="card-diamonds-9" src="cards/diamonds_9.svg" class="cardsrc"></img>
+    <img id="card-hearts-10" src="cards/hearts_10.svg" class="cardsrc"></img>
+    <img id="card-spades-10" src="cards/spades_10.svg" class="cardsrc"></img>
+    <img id="card-clubs-10" src="cards/clubs_10.svg" class="cardsrc"></img>
+    <img id="card-diamonds-10" src="cards/diamonds_10.svg" class="cardsrc"></img>
+    <img id="card-hearts-11" src="cards/hearts_jack.svg" class="cardsrc"></img>
+    <img id="card-spades-11" src="cards/spades_jack.svg" class="cardsrc"></img>
+    <img id="card-clubs-11" src="cards/clubs_jack.svg" class="cardsrc"></img>
+    <img id="card-diamonds-11" src="cards/diamonds_jack.svg" class="cardsrc"></img>
+    <img id="card-hearts-12" src="cards/hearts_queen.svg" class="cardsrc"></img>
+    <img id="card-spades-12" src="cards/spades_queen.svg" class="cardsrc"></img>
+    <img id="card-clubs-12" src="cards/clubs_queen.svg" class="cardsrc"></img>
+    <img id="card-diamonds-12" src="cards/diamonds_queen.svg" class="cardsrc"></img>
+    <img id="card-hearts-13" src="cards/hearts_king.svg" class="cardsrc"></img>
+    <img id="card-spades-13" src="cards/spades_king.svg" class="cardsrc"></img>
+    <img id="card-clubs-13" src="cards/clubs_king.svg" class="cardsrc"></img>
+    <img id="card-diamonds-13" src="cards/diamonds_king.svg" class="cardsrc"></img>
+    <img id="card-cardback" src="cards/cardback.svg" class="cardsrc"></img>
+    <script>
+        const CANVAS = document.getElementById("maincanvas");
+        const CONTEXT = CANVAS.getContext("2d");
+        const CARDBACK = "🂠";
+        const CARDS = [
+            "🂡", "🂢", "🂣", "🂤", "🂥", "🂦", "🂧", "🂨", "🂩", "🂪", "🂫", "🂭", "🂮",
+            "🂱", "🂲", "🂳", "🂴", "🂵", "🂶", "🂷", "🂸", "🂹", "🂺", "🂻", "🂽", "🂾",
+            "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎",
+            "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",
+        ];
+        var deck = null;
+        var hand = null;
+        var discarded = null;
+        var deckanchor = { x: null, y: null, offset: null };
+        var handanchor = { x: null, y: null, offset: null };
+        var scale = 1;
+        // =========================================================
+        function suit(card) {
+            var index = CARDS.findIndex((c) => c === card);
+            switch (Math.floor(index / 13)) {
+                case 0:
+                    return "SPADES";
+                case 1:
+                    return "HEARTS";
+                case 2:
+                    return "DIAMONDS";
+                case 3:
+                    return "CLUBS";
+                default:
+                    console.error("invalid suit for card:", card, index)
+                    return null;
             }
-            button {
-                width: 10%;
-                height: 10%;
-                font: 20px Georgia;
-                position: absolute;
-                top:2%;
+        }
+        function rank(card) {
+            var index = CARDS.findIndex((c) => c === card);
+            return index % 13;
+        }
+        function card2svgelem(card) {
+            if (card == CARDBACK) {
+                return document.getElementById("card-cardback");
             }
-            #draw {
-                left: 15%;
+            else {
+                return document.getElementById("card-" + suit(card).toLowerCase() + '-' + (rank(card) + 1));
             }
-            #discard2 {
-                left: 35%
+        }
+        function shuffle(array) {
+            // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
             }
-            #discard4 {
-                left: 55%;
-            }
-            #newgame {
-                left: 75%;
-            }
-            .cardsrc {
-                display: none;
-            }
-        </style>
-    </head>
-    <body onload="window_resize()">
-        <button id="draw" onclick="draw()">Draw 1</button>
-        <button id="discard2" onclick="discard2()">Discard Inner 2</button>
-        <button id="discard4" onclick="discard4()">Discard All 4</button>
-        <button id="newgame" onclick="setup_new_game()">New Game</button>
-        <canvas id="maincanvas"></canvas>
-        <<img id="card-hearts-ace" href="cards/hearts_ace.svg" class="cardsrc"></img>
-        <img id="card-spades-ace" href="cards/spades_ace.svg" class="cardsrc"></img>
-        <img id="card-clubs-ace" href="cards/clubs_ace.svg" class="cardsrc"></img>
-        <img id="card-diamonds-ace" href="cards/diamonds_ace.svg" class="cardsrc"></img>
-        <img id="card-hearts-2" href="cards/hearts_2.svg" class="cardsrc"></img>
-        <img id="card-spades-2" href="cards/spades_2.svg" class="cardsrc"></img>
-        <img id="card-clubs-2" href="cards/clubs_2.svg" class="cardsrc"></img>
-        <img id="card-diamonds-2" href="cards/diamonds_2.svg" class="cardsrc"></img>
-        <img id="card-hearts-3" href="cards/hearts_3.svg" class="cardsrc"></img>
-        <img id="card-spades-3" href="cards/spades_3.svg" class="cardsrc"></img>
-        <img id="card-clubs-3" href="cards/clubs_3.svg" class="cardsrc"></img>
-        <img id="card-diamonds-3" href="cards/diamonds_3.svg" class="cardsrc"></img>
-        <img id="card-hearts-4" href="cards/hearts_4.svg" class="cardsrc"></img>
-        <img id="card-spades-4" href="cards/spades_4.svg" class="cardsrc"></img>
-        <img id="card-clubs-4" href="cards/clubs_4.svg" class="cardsrc"></img>
-        <img id="card-diamonds-4" href="cards/diamonds_4.svg" class="cardsrc"></img>
-        <img id="card-hearts-5" href="cards/hearts_5.svg" class="cardsrc"></img>
-        <img id="card-spades-5" href="cards/spades_5.svg" class="cardsrc"></img>
-        <img id="card-clubs-5" href="cards/clubs_5.svg" class="cardsrc"></img>
-        <img id="card-diamonds-5" href="cards/diamonds_5.svg" class="cardsrc"></img>
-        <img id="card-hearts-6" href="cards/hearts_6.svg" class="cardsrc"></img>
-        <img id="card-spades-6" href="cards/spades_6.svg" class="cardsrc"></img>
-        <img id="card-clubs-6" href="cards/clubs_6.svg" class="cardsrc"></img>
-        <img id="card-diamonds-6" href="cards/diamonds_6.svg" class="cardsrc"></img>
-        <img id="card-hearts-7" href="cards/hearts_7.svg" class="cardsrc"></img>
-        <img id="card-spades-7" href="cards/spades_7.svg" class="cardsrc"></img>
-        <img id="card-clubs-7" href="cards/clubs_7.svg" class="cardsrc"></img>
-        <img id="card-diamonds-7" href="cards/diamonds_7.svg" class="cardsrc"></img>
-        <img id="card-hearts-8" href="cards/hearts_8.svg" class="cardsrc"></img>
-        <img id="card-spades-8" href="cards/spades_8.svg" class="cardsrc"></img>
-        <img id="card-clubs-8" href="cards/clubs_8.svg" class="cardsrc"></img>
-        <img id="card-diamonds-8" href="cards/diamonds_8.svg" class="cardsrc"></img>
-        <img id="card-hearts-9" href="cards/hearts_9.svg" class="cardsrc"></img>
-        <img id="card-spades-9" href="cards/spades_9.svg" class="cardsrc"></img>
-        <img id="card-clubs-9" href="cards/clubs_9.svg" class="cardsrc"></img>
-        <img id="card-diamonds-9" href="cards/diamonds_9.svg" class="cardsrc"></img>
-        <img id="card-hearts-10" href="cards/hearts_10.svg" class="cardsrc"></img>
-        <img id="card-spades-10" href="cards/spades_10.svg" class="cardsrc"></img>
-        <img id="card-clubs-10" href="cards/clubs_10.svg" class="cardsrc"></img>
-        <img id="card-diamonds-10" href="cards/diamonds_10.svg" class="cardsrc"></img>
-        <img id="card-hearts-jack" href="cards/hearts_jack.svg" class="cardsrc"></img>
-        <img id="card-spades-jack" href="cards/spades_jack.svg" class="cardsrc"></img>
-        <img id="card-clubs-jack" href="cards/clubs_jack.svg" class="cardsrc"></img>
-        <img id="card-diamonds-jack" href="cards/diamonds_jack.svg" class="cardsrc"></img>
-        <img id="card-hearts-queen" href="cards/hearts_queen.svg" class="cardsrc"></img>
-        <img id="card-spades-queen" href="cards/spades_queen.svg" class="cardsrc"></img>
-        <img id="card-clubs-queen" href="cards/clubs_queen.svg" class="cardsrc"></img>
-        <img id="card-diamonds-queen" href="cards/diamonds_queen.svg" class="cardsrc"></img>
-        <img id="card-hearts-king" href="cards/hearts_king.svg" class="cardsrc"></img>
-        <img id="card-spades-king" href="cards/spades_king.svg" class="cardsrc"></img>
-        <img id="card-clubs-king" href="cards/clubs_king.svg" class="cardsrc"></img>
-        <img id="card-diamonds-king" href="cards/diamonds_king.svg" class="cardsrc"></img>
-        <img id="card-cardback" href="cards/cardback.svg" class="cardsrc"></img>
-        <script>
-            const CANVAS = document.getElementById("maincanvas");
-            const CONTEXT = CANVAS.getContext("2d");
-            const CARDBACK = "🂠";
-            const CARDS = [
-                "🂡", "🂢", "🂣", "🂤", "🂥", "🂦", "🂧", "🂨", "🂩", "🂪", "🂫", "🂭", "🂮",
-                "🂱", "🂲", "🂳", "🂴", "🂵", "🂶", "🂷", "🂸", "🂹", "🂺", "🂻", "🂽", "🂾", 
-                "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎", 
-                "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",  
-            ];
-            var deck = null;
-            var hand = null;
-            var discarded = null;
-            var deckanchor = {x:null, y:null};
-            var handanchor = {x:null, y:null};
-            // =========================================================
-            function suit(card) {
-                var index = CARDS.findIndex((c) => c === card);
-                switch (Math.floor(index / 13)) {
-                    case 0:
-                        return "SPADES";
-                    case 1:
-                        return "HEARTS";
-                    case 2:
-                        return "DIAMONDS";
-                    case 3:
-                        return "CLUBS";
-                    default:
-                        console.error("invalid suit for card:", card, index)
-                        return null;
-                }
-            }
-            function rank(card) {
-                var index = CARDS.findIndex((c) => c === card);
-                return index % 13;
-            }
-            function card2svgelem(card) {
-                if (card == CARDBACK) {
-                    return document.getElementById("card-cardback");
+        }
+        function setup_new_game() {
+            console.log("setup_new_game");
+            // todo animation?
+            // set up initial deck
+            deck = CARDS.slice();
+            shuffle(deck);
+            hand = deck.slice(0, 4);
+            deck = deck.slice(4);
+            discarded = [];
+            // display initial setup
+            show_game();
+        }
+        function show_game() {
+            console.log("show_game");
+            if (hand == null || deck == null) { return; }
+            CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
+            var win = check_win();
+            if (win != null) {
+                CONTEXT.font = "80px Georgia";
+                if (win == 0) {
+                    CONTEXT.fillText("YOU WON!");
                 }
                 else {
-                    return document.getElementById("card-" + suit(card).toLowerCase() + '-' + rank(card));
+                    CONTEXT.fillText("GAME OVER ... SCORE = " + win.toString(), 10, CANVAS.height / 2);
                 }
             }
-            function shuffle(array) {
-                // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-                for (var i = array.length - 1; i > 0; i--) {
-                    var j = Math.floor(Math.random() * (i + 1));
-                    var temp = array[i];
-                    array[i] = array[j];
-                    array[j] = temp;
+            else {
+                var x = deckanchor.x, y = deckanchor.y;
+                var backelem = card2svgelem(CARDBACK);
+                var h = backelem.height * scale;
+                var w = backelem.width * scale;
+                // show the discard
+                console.debug("discarded: ", discarded);
+                for (let index = 0; index < discarded.length; index++) {
+                    const element = discarded[index];
+                    var svgelem = card2svgelem(element);
+                    CONTEXT.drawImage(svgelem, x, y, w, h);
+                    x = x + deckanchor.offset;
                 }
-            }
-            function setup_new_game() {
-                console.log("setup_new_game");
-                // todo animation?
-                // set up initial deck
-                deck = CARDS.slice();
-                shuffle(deck);
-                hand = deck.slice(0, 4);
-                deck = deck.slice(4);
-                discarded = [];
-                // display initial setup
-                show_game();
-            }
-            function show_game() {
-                console.log("show_game");
-                if (hand == null || deck == null) { return; }
-                CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
-                var win = check_win();
-                if (win != null) {
-                    CONTEXT.font = "80px Georgia";
-                    if (win == 0){
-                        CONTEXT.fillText("YOU WON!");
+                x = x + deckanchor.offset * 2;
+                // show the deck
+                console.debug("deck: ", deck);
+                for (let index = 0; index < deck.length; index++) {
+                    CONTEXT.drawImage(backelem, x, y, w, h);
+                    x = x + deckanchor.offset;
+                }
+                // show the hand
+                console.debug("hand: ", hand);
+                for (let index = 0; index < hand.length; index++) {
+                    const element = hand[index];
+                    var svgelem = card2svgelem(element);
+                    CONTEXT.drawImage(svgelem, x, y, w, h);
+                    if (index >= hand.length - 4) {
+                        x = x + handanchor.offset;
                     }
                     else {
-                        CONTEXT.fillText("GAME OVER ... SCORE = " + win.toString(), 10, CANVAS.height / 2);
-                    }
-                }
-                else {
-                    // show the hand
-                    for (let index = 0; index < hand.length; index++) {
-                        const element = hand[index];
-                        var svgelem = card2svgelem(element);
-                        var x = handanchor.x + 50 * index;
-                        var y = handanchor.y;
-                        var h = 100;
-                        var w = 100;
-                        CONTEXT.drawImage(svgelem, x, y, w, h);
-                    }
-                    // show the deck
-                    for (let index = 0; index < deck.length; index++) {
-                        CONTEXT.fillStyle = "#FFFFFF";
-                        CONTEXT.fillRect(deckanchor.x + 10 * index, deckanchor.y, cardsize.width, cardsize.actualBoundingBoxAscent + cardsize.actualBoundingBoxDescent);
-                        CONTEXT.fillStyle = "#000000";
-                        CONTEXT.fillText(CARDBACK, deckanchor.x + 10 * index, deckanchor.y);
-                        CONTEXT.strokeText(CARDBACK, deckanchor.x + 10 * index, deckanchor.y);
+                        x = x + deckanchor.offset;
                     }
                 }
             }
-            function draw() {
-                console.log("drawing");
-                hand = hand.concat(deck.slice(0, 1));
-                deck = deck.slice(1);
+        }
+        function draw() {
+            console.log("drawing");
+            hand = hand.concat(deck.slice(0, 1));
+            deck = deck.slice(1);
+            show_game();
+        }
+        function discard2() {
+            // look at last four
+            card1 = hand.at(-4);
+            card2 = hand.at(-1);
+            console.log("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            if (card1 != undefined && card2 != undefined && suit(card1) == suit(card2)) {
+                discarded = discarded.concat(hand.slice(-3, -1));
+                hand.splice(-3, 2);
                 show_game();
             }
-            function discard2() {
-                // look at last four
-                card1 = hand.at(-4);
-                card2 = hand.at(-1);
-                console.log("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
-                if (card1 != undefined && card2 != undefined && suit(card1) == suit(card2)) {
-                    discarded.concat(hand.slice(-3, 2));
-                    hand.splice(-3, 2);
-                    show_game();
-                }
-            }
-            function discard4() {
-                // look at last four
-                card1 = hand.at(-4);
-                card2 = hand.at(-1);
-                console.log("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
-                if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
-                    discarded.concat(hand.slice(-4, 4));
-                    hand.splice(-4, 4);
-                    show_game();
-                }
-            }
-            function check_win() {
-                // if game is over, return score (golf rules). else, return null
-                if (deck != null && deck.length == 0) {
-                    // game is over
-                    return hand.length;
-                }
-                return null;
-            }
-            function window_resize() {
-                CANVAS.width  = window.innerWidth;
-                CANVAS.height = window.innerHeight;
-                CANVAS.style.width = window.innerWidth;
-                CANVAS.style.height = window.innerHeight;
-                deckanchor.x = window.innerWidth * 0.1;
-                deckanchor.y = window.innerHeight * 0.3;
-                handanchor.x = window.innerWidth * 0.1;
-                handanchor.y = window.innerHeight * 0.5;
+        }
+        function discard4() {
+            // look at last four
+            card1 = hand.at(-4);
+            card2 = hand.at(-1);
+            console.log("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
+                discarded = discarded.concat(hand.slice(-4, 0));
+                hand.splice(-4, 4);
                 show_game();
+            }
+        }
+        function check_win() {
+            // if game is over, return score (golf rules). else, return null
+            if (deck != null && deck.length == 0) {
+                // game is over
+                return hand.length;
+            }
+            return null;
+        }
+        function getMousePos(canvas, evt) {
+            // https://stackoverflow.com/a/17130415
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
             };
-            window.addEventListener('resize', window_resize);
-            window.addEventListener('onload', window_resize);
-        </script>
-    </body>
+        }
+        function window_resize() {
+            CANVAS.width = window.innerWidth;
+            CANVAS.height = window.innerHeight;
+            CANVAS.style.width = window.innerWidth;
+            CANVAS.style.height = window.innerHeight;
+            // we want to show 
+            //  the discard (face up)
+            //  the deck (face down)
+            //  the hand (small offset, then big offset for last 4 cards) 
+            // we want to fit the width first; 48 cards at the small offset + 4 at the big one
+            var cardbackelem = card2svgelem(CARDBACK);
+            scale = Math.min((CANVAS.height / 1.5) / cardbackelem.height, (CANVAS.width / 3) / cardbackelem.width);
+            deckanchor.x = CANVAS.width * 0.01;
+            deckanchor.y = (CANVAS.innerHeight - (cardbackelem.height * scale)) / 2;   // center vertically
+            deckanchor.offset = scale * cardbackelem.width / 20;
+            handanchor.offset = scale * cardbackelem.width / 3;
+            console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handanchor);
+            show_game();
+        };
+        window.addEventListener('resize', window_resize);
+        window.addEventListener('onload', window_resize);
+    </script>
+</body>
+
 </html>
