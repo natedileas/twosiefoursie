@@ -280,7 +280,7 @@
             var cardbackelem = card2svgelem(CARDBACK);
             scale = Math.min((CANVAS.height / 1.5) / cardbackelem.height, (CANVAS.width / 3) / cardbackelem.width);
             deckanchor.x = CANVAS.width * 0.01;
-            deckanchor.y = (CANVAS.innerHeight - (cardbackelem.height * scale)) / 2;   // center vertically
+            deckanchor.y = (CANVAS.height - (cardbackelem.height * scale)) / 2;   // center vertically
             deckanchor.offset = scale * cardbackelem.width / 20;
             handanchor.offset = scale * cardbackelem.width / 3;
             console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handanchor);
