@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<!-- 
-    https://commons.wikimedia.org/wiki/Category:SVG_Atlasnye_playing_cards
-    By Дмитрий Фомин (Dmitry Fomin) - Own work, CC0, https://commons.wikimedia.org/w/index.php?curid=56604089
- -->
 <html>
 
 <head>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
     <style>
         html,
         body {
@@ -55,59 +53,62 @@
     <button id="discard4" onclick="discard4()">Discard All 4</button>
     <button id="newgame" onclick="setup_new_game()">New Game</button>
     <canvas id="maincanvas" tabindex='1'></canvas>
-    <img id="card-hearts-1" src="cards/hearts_ace.svg" class="cardsrc"></img>
-    <img id="card-spades-1" src="cards/spades_ace.svg" class="cardsrc"></img>
-    <img id="card-clubs-1" src="cards/clubs_ace.svg" class="cardsrc"></img>
-    <img id="card-diamonds-1" src="cards/diamonds_ace.svg" class="cardsrc"></img>
-    <img id="card-hearts-2" src="cards/hearts_2.svg" class="cardsrc"></img>
-    <img id="card-spades-2" src="cards/spades_2.svg" class="cardsrc"></img>
-    <img id="card-clubs-2" src="cards/clubs_2.svg" class="cardsrc"></img>
-    <img id="card-diamonds-2" src="cards/diamonds_2.svg" class="cardsrc"></img>
-    <img id="card-hearts-3" src="cards/hearts_3.svg" class="cardsrc"></img>
-    <img id="card-spades-3" src="cards/spades_3.svg" class="cardsrc"></img>
-    <img id="card-clubs-3" src="cards/clubs_3.svg" class="cardsrc"></img>
-    <img id="card-diamonds-3" src="cards/diamonds_3.svg" class="cardsrc"></img>
-    <img id="card-hearts-4" src="cards/hearts_4.svg" class="cardsrc"></img>
-    <img id="card-spades-4" src="cards/spades_4.svg" class="cardsrc"></img>
-    <img id="card-clubs-4" src="cards/clubs_4.svg" class="cardsrc"></img>
-    <img id="card-diamonds-4" src="cards/diamonds_4.svg" class="cardsrc"></img>
-    <img id="card-hearts-5" src="cards/hearts_5.svg" class="cardsrc"></img>
-    <img id="card-spades-5" src="cards/spades_5.svg" class="cardsrc"></img>
-    <img id="card-clubs-5" src="cards/clubs_5.svg" class="cardsrc"></img>
-    <img id="card-diamonds-5" src="cards/diamonds_5.svg" class="cardsrc"></img>
-    <img id="card-hearts-6" src="cards/hearts_6.svg" class="cardsrc"></img>
-    <img id="card-spades-6" src="cards/spades_6.svg" class="cardsrc"></img>
-    <img id="card-clubs-6" src="cards/clubs_6.svg" class="cardsrc"></img>
-    <img id="card-diamonds-6" src="cards/diamonds_6.svg" class="cardsrc"></img>
-    <img id="card-hearts-7" src="cards/hearts_7.svg" class="cardsrc"></img>
-    <img id="card-spades-7" src="cards/spades_7.svg" class="cardsrc"></img>
-    <img id="card-clubs-7" src="cards/clubs_7.svg" class="cardsrc"></img>
-    <img id="card-diamonds-7" src="cards/diamonds_7.svg" class="cardsrc"></img>
-    <img id="card-hearts-8" src="cards/hearts_8.svg" class="cardsrc"></img>
-    <img id="card-spades-8" src="cards/spades_8.svg" class="cardsrc"></img>
-    <img id="card-clubs-8" src="cards/clubs_8.svg" class="cardsrc"></img>
-    <img id="card-diamonds-8" src="cards/diamonds_8.svg" class="cardsrc"></img>
-    <img id="card-hearts-9" src="cards/hearts_9.svg" class="cardsrc"></img>
-    <img id="card-spades-9" src="cards/spades_9.svg" class="cardsrc"></img>
-    <img id="card-clubs-9" src="cards/clubs_9.svg" class="cardsrc"></img>
-    <img id="card-diamonds-9" src="cards/diamonds_9.svg" class="cardsrc"></img>
-    <img id="card-hearts-10" src="cards/hearts_10.svg" class="cardsrc"></img>
-    <img id="card-spades-10" src="cards/spades_10.svg" class="cardsrc"></img>
-    <img id="card-clubs-10" src="cards/clubs_10.svg" class="cardsrc"></img>
-    <img id="card-diamonds-10" src="cards/diamonds_10.svg" class="cardsrc"></img>
-    <img id="card-hearts-11" src="cards/hearts_jack.svg" class="cardsrc"></img>
-    <img id="card-spades-11" src="cards/spades_jack.svg" class="cardsrc"></img>
-    <img id="card-clubs-11" src="cards/clubs_jack.svg" class="cardsrc"></img>
-    <img id="card-diamonds-11" src="cards/diamonds_jack.svg" class="cardsrc"></img>
-    <img id="card-hearts-12" src="cards/hearts_queen.svg" class="cardsrc"></img>
-    <img id="card-spades-12" src="cards/spades_queen.svg" class="cardsrc"></img>
-    <img id="card-clubs-12" src="cards/clubs_queen.svg" class="cardsrc"></img>
-    <img id="card-diamonds-12" src="cards/diamonds_queen.svg" class="cardsrc"></img>
-    <img id="card-hearts-13" src="cards/hearts_king.svg" class="cardsrc"></img>
-    <img id="card-spades-13" src="cards/spades_king.svg" class="cardsrc"></img>
-    <img id="card-clubs-13" src="cards/clubs_king.svg" class="cardsrc"></img>
-    <img id="card-diamonds-13" src="cards/diamonds_king.svg" class="cardsrc"></img>
-    <img id="card-cardback" src="cards/cardback.svg" class="cardsrc"></img>
+    <div id="gameend">
+        <p class="message" id="gameendmessage"></p>
+    </div>
+    <img id="card-hearts-1" src="images/cards/hearts_ace.svg" class="cardsrc"></img>
+    <img id="card-spades-1" src="images/cards/spades_ace.svg" class="cardsrc"></img>
+    <img id="card-clubs-1" src="images/cards/clubs_ace.svg" class="cardsrc"></img>
+    <img id="card-diamonds-1" src="images/cards/diamonds_ace.svg" class="cardsrc"></img>
+    <img id="card-hearts-2" src="images/cards/hearts_2.svg" class="cardsrc"></img>
+    <img id="card-spades-2" src="images/cards/spades_2.svg" class="cardsrc"></img>
+    <img id="card-clubs-2" src="images/cards/clubs_2.svg" class="cardsrc"></img>
+    <img id="card-diamonds-2" src="images/cards/diamonds_2.svg" class="cardsrc"></img>
+    <img id="card-hearts-3" src="images/cards/hearts_3.svg" class="cardsrc"></img>
+    <img id="card-spades-3" src="images/cards/spades_3.svg" class="cardsrc"></img>
+    <img id="card-clubs-3" src="images/cards/clubs_3.svg" class="cardsrc"></img>
+    <img id="card-diamonds-3" src="images/cards/diamonds_3.svg" class="cardsrc"></img>
+    <img id="card-hearts-4" src="images/cards/hearts_4.svg" class="cardsrc"></img>
+    <img id="card-spades-4" src="images/cards/spades_4.svg" class="cardsrc"></img>
+    <img id="card-clubs-4" src="images/cards/clubs_4.svg" class="cardsrc"></img>
+    <img id="card-diamonds-4" src="images/cards/diamonds_4.svg" class="cardsrc"></img>
+    <img id="card-hearts-5" src="images/cards/hearts_5.svg" class="cardsrc"></img>
+    <img id="card-spades-5" src="images/cards/spades_5.svg" class="cardsrc"></img>
+    <img id="card-clubs-5" src="images/cards/clubs_5.svg" class="cardsrc"></img>
+    <img id="card-diamonds-5" src="images/cards/diamonds_5.svg" class="cardsrc"></img>
+    <img id="card-hearts-6" src="images/cards/hearts_6.svg" class="cardsrc"></img>
+    <img id="card-spades-6" src="images/cards/spades_6.svg" class="cardsrc"></img>
+    <img id="card-clubs-6" src="images/cards/clubs_6.svg" class="cardsrc"></img>
+    <img id="card-diamonds-6" src="images/cards/diamonds_6.svg" class="cardsrc"></img>
+    <img id="card-hearts-7" src="images/cards/hearts_7.svg" class="cardsrc"></img>
+    <img id="card-spades-7" src="images/cards/spades_7.svg" class="cardsrc"></img>
+    <img id="card-clubs-7" src="images/cards/clubs_7.svg" class="cardsrc"></img>
+    <img id="card-diamonds-7" src="images/cards/diamonds_7.svg" class="cardsrc"></img>
+    <img id="card-hearts-8" src="images/cards/hearts_8.svg" class="cardsrc"></img>
+    <img id="card-spades-8" src="images/cards/spades_8.svg" class="cardsrc"></img>
+    <img id="card-clubs-8" src="images/cards/clubs_8.svg" class="cardsrc"></img>
+    <img id="card-diamonds-8" src="images/cards/diamonds_8.svg" class="cardsrc"></img>
+    <img id="card-hearts-9" src="images/cards/hearts_9.svg" class="cardsrc"></img>
+    <img id="card-spades-9" src="images/cards/spades_9.svg" class="cardsrc"></img>
+    <img id="card-clubs-9" src="images/cards/clubs_9.svg" class="cardsrc"></img>
+    <img id="card-diamonds-9" src="images/cards/diamonds_9.svg" class="cardsrc"></img>
+    <img id="card-hearts-10" src="images/cards/hearts_10.svg" class="cardsrc"></img>
+    <img id="card-spades-10" src="images/cards/spades_10.svg" class="cardsrc"></img>
+    <img id="card-clubs-10" src="images/cards/clubs_10.svg" class="cardsrc"></img>
+    <img id="card-diamonds-10" src="images/cards/diamonds_10.svg" class="cardsrc"></img>
+    <img id="card-hearts-11" src="images/cards/hearts_jack.svg" class="cardsrc"></img>
+    <img id="card-spades-11" src="images/cards/spades_jack.svg" class="cardsrc"></img>
+    <img id="card-clubs-11" src="images/cards/clubs_jack.svg" class="cardsrc"></img>
+    <img id="card-diamonds-11" src="images/cards/diamonds_jack.svg" class="cardsrc"></img>
+    <img id="card-hearts-12" src="images/cards/hearts_queen.svg" class="cardsrc"></img>
+    <img id="card-spades-12" src="images/cards/spades_queen.svg" class="cardsrc"></img>
+    <img id="card-clubs-12" src="images/cards/clubs_queen.svg" class="cardsrc"></img>
+    <img id="card-diamonds-12" src="images/cards/diamonds_queen.svg" class="cardsrc"></img>
+    <img id="card-hearts-13" src="images/cards/hearts_king.svg" class="cardsrc"></img>
+    <img id="card-spades-13" src="images/cards/spades_king.svg" class="cardsrc"></img>
+    <img id="card-clubs-13" src="images/cards/clubs_king.svg" class="cardsrc"></img>
+    <img id="card-diamonds-13" src="images/cards/diamonds_king.svg" class="cardsrc"></img>
+    <img id="card-cardback" src="images/cards/cardback.svg" class="cardsrc"></img>
     <script>
         const CANVAS = document.getElementById("maincanvas");
         const CONTEXT = CANVAS.getContext("2d");

@@ -8,4 +8,5 @@ Written in bare html, js, and css, in a single file -- I'm not a web dev, so I w
 - Playing Cards: By Дмитрий Фомин (Dmitry Fomin) - Own work, CC0, https://commons.wikimedia.org/w/index.php?curid=56604089
     + I edited these slightly, changing the text for aces, jacks, and queens to american standard symbols
 - Inkscape
+- https://realfavicongenerator.net/svg-favicon/
 - Grampa

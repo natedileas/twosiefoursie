@@ -8,10 +8,38 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="360"
    height="540"
-   id="svg2">
+   id="svg2"
+   sodipodi:docname="diamonds_jack.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="739"
+     id="namedview1645"
+     showgrid="true"
+     inkscape:zoom="1.2361274"
+     inkscape:cx="235.64477"
+     inkscape:cy="348.2041"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3118" />
+  </sodipodi:namedview>
   <metadata
      id="metadata692">
     <rdf:RDF>
@@ -20,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,14 +67,7 @@
        style="fill:#ffffff;stroke:#000000" />
     <g
        id="g8"
-       style="fill:#ff5555">
-      <path
-         d="m 20,542.36 v 50 h 5 5 c 5.54,0 10,-4.46 10,-10 v -10 c 0,-3 -1.323,-5.67 -3.406,-7.5 2.083,-1.83 3.406,-4.496 3.406,-7.5 v -5 c 0,-5.54 -4.46,-10 -10,-10 h -5 z m 5,5 h 5 c 2.77,0 5,2.23 5,5 v 5 c 0,2.77 -2.23,5 -5,5 h -5 z m 0,20 h 5 c 2.77,0 5,2.23 5,5 v 10 c 0,2.77 -2.23,5 -5,5 h -5 z"
-         id="path10" />
-      <path
-         d="m 340,1022.36 v -50 h -5 -5 c -5.54,0 -10,4.46 -10,10 v 10 c 0,3 1.323,5.67 3.406,7.5 -2.083,1.83 -3.406,4.496 -3.406,7.5 v 5 c 0,5.54 4.46,10 10,10 h 5 z m -5,-5 h -5 c -2.77,0 -5,-2.23 -5,-5 v -5 c 0,-2.77 2.23,-5 5,-5 h 5 z m 0,-20 h -5 c -2.77,0 -5,-2.23 -5,-5 v -10 c 0,-2.77 2.23,-5 5,-5 h 5 z"
-         id="path12" />
-    </g>
+       style="fill:#ff5555" />
     <g
        transform="translate(0,512.36)"
        id="g14"
@@ -2443,4 +2464,16 @@
          xlink:href="#1v" />
     </g>
   </g>
+  <path
+     inkscape:connector-curvature="0"
+     d="m 30.033317,80 c 5.539999,0 9.999999,-4.46 9.999999,-10 V 50 40 L 40.02245,30 H 20.325816 v 5 H 35.02245 c 0.14613,25 0.01087,25.484559 0.01087,35 0,2.77 -2.229999,5 -4.999999,5 -2.77,0 -5,-2.23 -5,-5 v -1 h -5 v 1 c 0,5.54 4.46,10 10,10"
+     id="path32"
+     style="fill:#ff5555;fill-opacity:1"
+     sodipodi:nodetypes="cscccccccssccsc" />
+  <path
+     inkscape:connector-curvature="0"
+     d="m 330.15283,459.99998 c -5.54,0 -10,4.45999 -10,10 v 20 10 l 0.0109,10 h 19.69663 v -5 h -14.69663 c -0.14613,-25 -0.0109,-25.48456 -0.0109,-35 0,-2.77 2.23,-5 5,-5 2.77,0 5,2.23 5,5 v 1 h 5 v -1 c 0,-5.54001 -4.46,-10 -10,-10"
+     id="path32-6"
+     style="fill:#ff5555;fill-opacity:1"
+     sodipodi:nodetypes="cscccccccssccsc" />
 </svg>
