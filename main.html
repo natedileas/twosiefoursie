@@ -118,11 +118,13 @@
             "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎",
             "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",
         ];
+        const DECKOFFSETRATIO = 1 / 20;    // i.e. 20 cards per card width
+        const HANDOFFSETRATIO = 1 / 3;
         var deck = null;
         var hand = null;
         var discarded = null;
         var deckanchor = { x: null, y: null, offset: null };
-        var handanchor = { x: null, y: null, offset: null };
+        var handoffset = null;
         var scale = 1;
         // =========================================================
         function suit(card) {
@@ -163,7 +165,7 @@
             }
         }
         function setup_new_game() {
-            console.log("setup_new_game");
+            console.debug("setup_new_game");
             // todo animation?
             // set up initial deck
             deck = CARDS.slice();
@@ -175,7 +177,7 @@
             show_game();
         }
         function show_game() {
-            console.log("show_game");
+            console.debug("show_game");
             if (hand == null || deck == null) { return; }
             CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
             var win = check_win();
@@ -201,7 +203,6 @@
                     CONTEXT.drawImage(svgelem, x, y, w, h);
                     x = x + deckanchor.offset;
                 }
-                x = x + deckanchor.offset * 2;
                 // show the deck
                 console.debug("deck: ", deck);
                 for (let index = 0; index < deck.length; index++) {
@@ -215,7 +216,7 @@
                     var svgelem = card2svgelem(element);
                     CONTEXT.drawImage(svgelem, x, y, w, h);
                     if (index >= hand.length - 4) {
-                        x = x + handanchor.offset;
+                        x = x + handoffset;
                     }
                     else {
                         x = x + deckanchor.offset;
@@ -224,7 +225,7 @@
             }
         }
         function draw() {
-            console.log("drawing");
+            console.debug("drawing");
             hand = hand.concat(deck.slice(0, 1));
             deck = deck.slice(1);
             show_game();
@@ -233,7 +234,7 @@
             // look at last four
             card1 = hand.at(-4);
             card2 = hand.at(-1);
-            console.log("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            console.debug("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
             if (card1 != undefined && card2 != undefined && suit(card1) == suit(card2)) {
                 discarded = discarded.concat(hand.slice(-3, -1));
                 hand.splice(-3, 2);
@@ -244,7 +245,7 @@
             // look at last four
             card1 = hand.at(-4);
             card2 = hand.at(-1);
-            console.log("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            console.debug("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
             if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
                 discarded = discarded.concat(hand.slice(-4, 0));
                 hand.splice(-4, 4);
@@ -272,18 +273,17 @@
             CANVAS.height = window.innerHeight;
             CANVAS.style.width = window.innerWidth;
             CANVAS.style.height = window.innerHeight;
-            // we want to show 
-            //  the discard (face up)
-            //  the deck (face down)
-            //  the hand (small offset, then big offset for last 4 cards) 
-            // we want to fit the width first; 48 cards at the small offset + 4 at the big one
             var cardbackelem = card2svgelem(CARDBACK);
-            scale = Math.min((CANVAS.height / 1.5) / cardbackelem.height, (CANVAS.width / 3) / cardbackelem.width);
-            deckanchor.x = CANVAS.width * 0.01;
+            fullwidthunscaled = cardbackelem.width * (48 * DECKOFFSETRATIO + 3 * HANDOFFSETRATIO + 1);
+            scale = Math.min(
+                (CANVAS.height / 1.1) / cardbackelem.height,
+                (CANVAS.width / 1.1) / fullwidthunscaled
+            );
+            deckanchor.offset = scale * cardbackelem.width * DECKOFFSETRATIO;
+            handoffset = scale * cardbackelem.width * HANDOFFSETRATIO;
+            deckanchor.x = (CANVAS.width - fullwidthunscaled * scale) / 2;
             deckanchor.y = (CANVAS.height - (cardbackelem.height * scale)) / 2;   // center vertically
-            deckanchor.offset = scale * cardbackelem.width / 20;
-            handanchor.offset = scale * cardbackelem.width / 3;
-            console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handanchor);
+            console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handoffset);
             show_game();
         };
         function mouse_move(event) {
@@ -319,9 +319,9 @@
         }
         window.addEventListener('resize', window_resize);
         window.addEventListener('load', window_resize);
+        window.addEventListener('keydown', key_down);
         // CANVAS.addEventListener('mousemove', mouse_move);
         // CANVAS.addEventListener('mousedown', mouse_down);
-        CANVAS.addEventListener('keydown', key_down);
     </script>
 </body>
 
