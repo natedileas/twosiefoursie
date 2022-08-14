@@ -21,3 +21,7 @@ Written in bare html, js, and css, in a single file -- I'm not a web dev, so I w
 ### TODO
 
 - save scores / high scores?
+- responsive design
+- hover / click for draw / discard
+- ads?
+- netlify domain?

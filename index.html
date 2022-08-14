@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
     <link rel="icon" type="image/png" href="/images/favicon.png">
     <style>
@@ -13,30 +14,11 @@
             margin: 0px;
             border: 0;
             overflow: hidden;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 0.5em;
             /*  Disable scrollbars */
             display: block;
             /* No floating content on sides */
-        }
-
-        button {
-            font: 20px Georgia;
-            position: absolute;
-            top: 2%;
-            margin: 5px;
-            display: inline-block;
-            text-align: center;
-        }
-
-        #draw {
-            left: 15%;
-        }
-
-        #discard2 {
-            left: 40%
-        }
-
-        #discard4 {
-            left: 65%;
         }
 
         #newgame {
@@ -53,7 +35,7 @@
             height: 70%;
             top: 15%;
             left: 15%;
-            font: 50px Georgia;
+            font-size: 2rem;
             display: none;
             border: solid 1px black;
             background-color: rgb(231, 210, 210);
@@ -61,16 +43,19 @@
             margin: 5px;
         }
 
-        #help {
-            font: 15px Georgia;
-        }
-
         #showhelp,
         #hidehelp {
             position: absolute;
             right: 1%;
-            top: 1%;
-            font: 15px Georgia;
+            bottom: 1%;
+            font-size: 2rem;
+        }
+
+        #buttoncontainer {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
         }
     </style>
 </head>
@@ -78,9 +63,14 @@
 <body>
     <!-- mousedown hack prevents focus hijacking, letting canvas keys work -->
     <a id="showhelp" href="#" onclick="show_help();">Help</a>
-    <button id="draw" onclick="draw()" onmousedown="event.preventDefault();">Draw 1 (Space)</button>
-    <button id="discard2" onclick="discard2()" onmousedown="event.preventDefault();">Discard Inner 2 (2)</button>
-    <button id="discard4" onclick="discard4()" onmousedown="event.preventDefault();">Discard All 4 (4)</button>
+    <div id="buttoncontainer">
+        <button id="draw" onclick="draw()" onmousedown="event.preventDefault();">Draw 1 (Space or Click
+            Background)</button>
+        <button id="discard2" onclick="discard2()" onmousedown="event.preventDefault();">Discard Inner 2 (2 or Click
+            Hand)</button>
+        <button id="discard4" onclick="discard4()" onmousedown="event.preventDefault();">Discard All 4 (4 or Click
+            Hand)</button>
+    </div>
     <canvas id="maincanvas" tabindex='1'></canvas>
     <div id="gameend">
         <p class="message" id="gameendmessage"></p>
@@ -88,12 +78,15 @@
             This is a solitaire game. To play, you look at the last four cards in your hand.
             If the suits of the first and fourth card match, you discard the inner two cards.
             If the numbers of the first and fourth card match, you discard all four cards.
-            The goal is to discard as many cards as possible. Keyboard shortcuts are in parentheses. Have Fun!
+            The goal is to discard as many cards as possible. Keyboard shortcuts are in parentheses; or you can click on
+            the hand to discard, and the background to draw. Have Fun!
             <br /><br />
-            Developed by Nathan Dileas under MIT License. Github: https://github.com/natedileas/twosiefoursie
+            Developed by Nathan Dileas under MIT License. <a
+                href="https://github.com/natedileas/twosiefoursie">Github</a>
             <br />
-            Credits for the cards go to Дмитрий Фомин (Dmitry Fomin) - Own work, CC0,
-            https://commons.wikimedia.org/w/index.php?curid=56604089
+            Credits for the cards go to <a href="https://commons.wikimedia.org/w/index.php?curid=56604089">Дмитрий Фомин
+                (Dmitry Fomin) - Own work, CC0, Wikimedia</a>
+
         </p>
         <button id="newgame" onclick="setup_new_game()" onmousedown="event.preventDefault();">New Game (n)</button>
         <a id="hidehelp" href="#" onclick="hide_help();">Close</a>
@@ -170,6 +163,7 @@
         var deckanchor = { x: null, y: null, offset: null };
         var handoffset = null;
         var scale = 1;
+        var hand_loc = { x: null, y: null, w: null, h: null };
         // =========================================================
         function suit(card) {
             var index = CARDS.findIndex((c) => c === card);
@@ -183,7 +177,7 @@
                 case 3:
                     return "CLUBS";
                 default:
-                    console.error("invalid suit for card:", card, index)
+                    console.debug("invalid suit for card:", card, index)
                     return null;
             }
         }
@@ -237,6 +231,7 @@
             console.debug("show_game");
             if (hand == null || deck == null) { return; }
             CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
+            hand_loc = { x: null, y: null, w: null, h: null };
             var win = check_win();
             if (win != null) {
                 var div = document.getElementById("gameend");
@@ -281,6 +276,13 @@
                     var svgelem = card2svgelem(element);
                     CONTEXT.drawImage(svgelem, x, y, w, h);
                     if (index >= hand.length - 4) {
+                        if (hand_loc.x == null) {
+                            hand_loc.x = x;
+                            hand_loc.y = y;
+                            hand_loc.w = w - handoffset;
+                            hand_loc.h = h;
+                        }
+                        hand_loc.w += handoffset;
                         x = x + handoffset;
                     }
                     else {
@@ -351,17 +353,18 @@
             console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handoffset);
             show_game();
         };
-        function mouse_move(event) {
-            var mouse = getMousePos(CANVAS, event);
-            // todo if mouse is over middle two cards and they can be discarded, show highlight
-            // todo if mouse is over last four cards and they can be discarded, show highlight
-            // todo if mouse is not over cards, ignore
-        }
         function mouse_down(event) {
+            if (event.buttons != 1) { return; }
             var mouse = getMousePos(CANVAS, event);
-            // todo if mouse is over middle two cards and they can be discarded, discard2()
-            // todo if mouse is over last four cards and they can be discarded, discard4()
-            // todo if mouse is not over cards, draw
+            console.debug("mouse down: ", event, mouse, hand_loc);
+            // if click is over hand:
+            if (mouse.x > hand_loc.x && mouse.x < hand_loc.x + hand_loc.w && mouse.y > hand_loc.y && mouse.y < hand_loc.y + hand_loc.h) {
+                discard4();
+                discard2();
+            }
+            else {
+                draw();
+            }
         }
         function key_down(event) {
             console.debug(event);
@@ -386,8 +389,7 @@
         window.addEventListener('load', window_resize);
         window.addEventListener('load', setup_new_game);
         window.addEventListener('keydown', key_down);
-        // CANVAS.addEventListener('mousemove', mouse_move);
-        // CANVAS.addEventListener('mousedown', mouse_down);
+        CANVAS.addEventListener('mousedown', mouse_down);
     </script>
 </body>
 
