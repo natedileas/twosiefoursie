@@ -10,3 +10,14 @@ Written in bare html, js, and css, in a single file -- I'm not a web dev, so I w
 - Inkscape
 - https://realfavicongenerator.net/svg-favicon/
 - Grampa
+
+## Dev
+
+- used `python3 -m http.server` for local dev server
+- using netlify with github login for hosting
+- ubuntu
+
+
+### TODO
+
+- save scores / high scores?
