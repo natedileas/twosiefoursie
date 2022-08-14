@@ -19,11 +19,12 @@
         }
 
         button {
-            width: 10%;
-            height: 10%;
             font: 20px Georgia;
             position: absolute;
             top: 2%;
+            margin: 5px;
+            display: inline-block;
+            text-align: center;
         }
 
         #draw {
@@ -31,33 +32,73 @@
         }
 
         #discard2 {
-            left: 35%
+            left: 40%
         }
 
         #discard4 {
-            left: 55%;
+            left: 65%;
         }
 
         #newgame {
-            left: 75%;
+            left: 35%;
         }
 
         .cardsrc {
             display: none;
+        }
+
+        #gameend {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            font: 50px Georgia;
+            display: none;
+            border: solid 1px black;
+            background-color: rgb(231, 210, 210);
+            text-align: center;
+            margin: 5px;
+        }
+
+        #help {
+            font: 15px Georgia;
+        }
+
+        #showhelp,
+        #hidehelp {
+            position: absolute;
+            right: 1%;
+            top: 1%;
+            font: 15px Georgia;
         }
     </style>
 </head>
 
 <body>
     <!-- mousedown hack prevents focus hijacking, letting canvas keys work -->
-    <button id="draw" onclick="draw()" onmousedown="event.preventDefault();">Draw 1</button>
-    <button id="discard2" onclick="discard2()" onmousedown="event.preventDefault();">Discard Inner 2</button>
-    <button id="discard4" onclick="discard4()" onmousedown="event.preventDefault();">Discard All 4</button>
-    <button id="newgame" onclick="setup_new_game()" onmousedown="event.preventDefault();">New Game</button>
+    <a id="showhelp" href="#" onclick="show_help();">Help</a>
+    <button id="draw" onclick="draw()" onmousedown="event.preventDefault();">Draw 1 (Space)</button>
+    <button id="discard2" onclick="discard2()" onmousedown="event.preventDefault();">Discard Inner 2 (2)</button>
+    <button id="discard4" onclick="discard4()" onmousedown="event.preventDefault();">Discard All 4 (4)</button>
     <canvas id="maincanvas" tabindex='1'></canvas>
     <div id="gameend">
         <p class="message" id="gameendmessage"></p>
+        <p id="help">
+            This is a solitaire game. To play, you look at the last four cards in your hand.
+            If the suits of the first and fourth card match, you discard the inner two cards.
+            If the numbers of the first and fourth card match, you discard all four cards.
+            The goal is to discard as many cards as possible. Keyboard shortcuts are in parentheses. Have Fun!
+            <br /><br />
+            Developed by Nathan Dileas under MIT License. Github: https://github.com/natedileas/twosiefoursie
+            <br />
+            Credits for the cards go to Дмитрий Фомин (Dmitry Fomin) - Own work, CC0,
+            https://commons.wikimedia.org/w/index.php?curid=56604089
+        </p>
+        <button id="newgame" onclick="setup_new_game()" onmousedown="event.preventDefault();">New Game (n)</button>
+        <a id="hidehelp" href="#" onclick="hide_help();">Close</a>
     </div>
+
     <img id="card-hearts-1" src="images/cards/hearts_ace.svg" class="cardsrc"></img>
     <img id="card-spades-1" src="images/cards/spades_ace.svg" class="cardsrc"></img>
     <img id="card-clubs-1" src="images/cards/clubs_ace.svg" class="cardsrc"></img>
@@ -177,7 +218,20 @@
             deck = deck.slice(4);
             discarded = [];
             // display initial setup
+            hide_help();
             show_game();
+        }
+        function show_help() {
+            var div = document.getElementById("gameend");
+            var message = document.getElementById("gameendmessage");
+            div.style.display = "block";
+            message.innerHTML = "";
+        }
+        function hide_help() {
+            var div = document.getElementById("gameend");
+            var message = document.getElementById("gameendmessage");
+            div.style.display = "none";
+            message.innerHTML = "";
         }
         function show_game() {
             console.debug("show_game");
@@ -185,13 +239,21 @@
             CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
             var win = check_win();
             if (win != null) {
-                CONTEXT.font = "80px Georgia";
+                var div = document.getElementById("gameend");
+                var message = document.getElementById("gameendmessage");
                 if (win == 0) {
-                    CONTEXT.fillText("YOU WON!");
+                    message.innerHTML = "You Won! Good Job.";
+                }
+                else if (win > 0 && win <= 10) {
+                    message.innerHTML = "You got pretty close! Only " + win + " cards left!";
+                }
+                else if (win > 10 && win <= 25) {
+                    message.innerHTML = "You did OK. " + win + " cards left.";
                 }
                 else {
-                    CONTEXT.fillText("GAME OVER ... SCORE = " + win.toString(), 10, CANVAS.height / 2);
+                    message.innerHTML = "Better luck next time! " + win + " cards left.";
                 }
+                div.style.display = "block";
             }
             else {
                 var x = deckanchor.x, y = deckanchor.y;
@@ -322,6 +384,7 @@
         }
         window.addEventListener('resize', window_resize);
         window.addEventListener('load', window_resize);
+        window.addEventListener('load', setup_new_game);
         window.addEventListener('keydown', key_down);
         // CANVAS.addEventListener('mousemove', mouse_move);
         // CANVAS.addEventListener('mousedown', mouse_down);
