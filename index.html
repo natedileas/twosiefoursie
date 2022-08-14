@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
     <link rel="icon" type="image/png" href="/images/favicon.png">
     <style>
@@ -47,11 +48,12 @@
     </style>
 </head>
 
-<body onload="window_resize()">
-    <button id="draw" onclick="draw()">Draw 1</button>
-    <button id="discard2" onclick="discard2()">Discard Inner 2</button>
-    <button id="discard4" onclick="discard4()">Discard All 4</button>
-    <button id="newgame" onclick="setup_new_game()">New Game</button>
+<body>
+    <!-- mousedown hack prevents focus hijacking, letting canvas keys work -->
+    <button id="draw" onclick="draw()" onmousedown="event.preventDefault();">Draw 1</button>
+    <button id="discard2" onclick="discard2()" onmousedown="event.preventDefault();">Discard Inner 2</button>
+    <button id="discard4" onclick="discard4()" onmousedown="event.preventDefault();">Discard All 4</button>
+    <button id="newgame" onclick="setup_new_game()" onmousedown="event.preventDefault();">New Game</button>
     <canvas id="maincanvas" tabindex='1'></canvas>
     <div id="gameend">
         <p class="message" id="gameendmessage"></p>
@@ -248,7 +250,7 @@
             card2 = hand.at(-1);
             console.debug("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
             if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
-                discarded = discarded.concat(hand.slice(-4, 0));
+                discarded = discarded.concat(hand.slice(-4));
                 hand.splice(-4, 4);
                 show_game();
             }
