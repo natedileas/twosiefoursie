@@ -22,6 +22,6 @@ Written in bare html, js, and css, in a single file -- I'm not a web dev, so I w
 
 - save scores / high scores?
 - responsive design
-- hover / click for draw / discard
 - ads?
-- netlify domain?
+- undo / count how many clicks? score based on that and n_cards_left?
+- sharing? might be cool to imitate wordle or similar
