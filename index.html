@@ -155,7 +155,7 @@
             "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎",
             "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",
         ];
-        const DECKOFFSETRATIO = 1 / 20;    // i.e. 20 cards per card width
+        var DECKOFFSETRATIO = 1 / 20;    // i.e. 20 cards per card width
         const HANDOFFSETRATIO = 1 / 3;
         var deck = null;
         var hand = null;
@@ -319,9 +319,17 @@
                 show_game();
             }
         }
+        function could_discard() {
+            card1 = hand.at(-4);
+            card2 = hand.at(-1);
+            if (card1 != undefined && card2 != undefined)
+                return suit(card1) == suit(card2) || rank(card1) == rank(card2);
+            else
+                return false;
+        }
         function check_win() {
             // if game is over, return score (golf rules). else, return null
-            if (deck != null && deck.length == 0) {
+            if (deck != null && deck.length == 0 && !could_discard()) {
                 // game is over
                 return hand.length;
             }
@@ -331,16 +339,25 @@
             // https://stackoverflow.com/a/17130415
             var rect = canvas.getBoundingClientRect();
             return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
+                x: (evt.clientX - rect.left) * window.devicePixelRatio,
+                y: (evt.clientY - rect.top) * window.devicePixelRatio
             };
         }
         function window_resize() {
-            CANVAS.width = window.innerWidth;
-            CANVAS.height = window.innerHeight;
-            CANVAS.style.width = window.innerWidth;
-            CANVAS.style.height = window.innerHeight;
+            CANVAS.width = window.innerWidth * window.devicePixelRatio;
+            CANVAS.height = window.innerHeight * window.devicePixelRatio;
+            CANVAS.style.width = window.innerWidth + "px";
+            CANVAS.style.height = window.innerHeight + "px";
+            CONTEXT.resetTransform();
+            // for some reason this screws everything up...
+            // CONTEXT.scale(window.devicePixelRatio, window.devicePixelRatio);
             var cardbackelem = card2svgelem(CARDBACK);
+            if (window.innerWidth < 500) {
+                DECKOFFSETRATIO = 1 / 80;
+            }
+            else {
+                DECKOFFSETRATIO = 1 / 40;
+            }
             fullwidthunscaled = cardbackelem.width * (48 * DECKOFFSETRATIO + 3 * HANDOFFSETRATIO + 1);
             scale = Math.min(
                 (CANVAS.height / 1.1) / cardbackelem.height,
