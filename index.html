@@ -164,14 +164,16 @@
             "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎",
             "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",
         ];
+        // hold the game state
         var game = {
             deck: null,
             hand: null,
             discarded: null,
             moves: null
         };
+        // hold all the global rendering state
         var rendering = {
-            deckoffsetratio: 1 / 20,    // i.e. 20 cards per card width
+            deckoffsetratio: 1 / 40,    // i.e. 40 cards per card width
             handoffsetratio: 1 / 3,
             deckanchor: { x: null, y: null, offset: null },
             handoffset: null,
@@ -181,11 +183,11 @@
                 front: { x: null, y: null },
                 back: { x: null, y: null },
             },
-            cardwidth: null,
+            cardwidth: null,   // scaled, floored card width and height
             cardheight: null,
-            cardbacktruncwidth: null
+            cardbacktruncwidth: null   // width of the truncated card backs to render
         };
-        // =========================================================
+        // ====================================================== GAME STATE CHANGES ============
         function suit(card) {
             var index = CARDS.findIndex((c) => c === card);
             switch (Math.floor(index / 13)) {
@@ -319,6 +321,7 @@
                 return document.getElementById("card-" + suit(card).toLowerCase() + '-' + (rank(card) + 1));
             }
         }
+        // render the game state to 'CANVAS' according to the set up 'rendering' info
         function render() {
             console.debug("show_game");
             if (game.hand == null || game.deck == null) { return; }
@@ -398,6 +401,7 @@
                 }
             }
         }
+        // when the window resizes, figure out the right sizes for everything and record it in the global 'rendering' object
         function window_resize() {
             CANVAS.width = window.innerWidth * window.devicePixelRatio;
             CANVAS.height = window.innerHeight * window.devicePixelRatio;
