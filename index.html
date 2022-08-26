@@ -156,6 +156,7 @@
     <script>
         const CANVAS = document.getElementById("maincanvas");
         const CONTEXT = CANVAS.getContext("2d");
+        CANVAS.offscreenCanvas = document.createElement('canvas');
         const CARDBACK = "🂠";
         const CARDS = [
             "🂡", "🂢", "🂣", "🂤", "🂥", "🂦", "🂧", "🂨", "🂩", "🂪", "🂫", "🂭", "🂮",
@@ -163,18 +164,27 @@
             "🃁", "🃂", "🃃", "🃄", "🃅", "🃆", "🃇", "🃈", "🃉", "🃊", "🃋", "🃍", "🃎",
             "🃑", "🃒", "🃓", "🃔", "🃕", "🃖", "🃗", "🃘", "🃙", "🃚", "🃛", "🃝", "🃞",
         ];
-        var DECKOFFSETRATIO = 1 / 20;    // i.e. 20 cards per card width
-        const HANDOFFSETRATIO = 1 / 3;
         var game = {
             deck: null,
             hand: null,
             discarded: null,
             moves: null
         };
-        var deckanchor = { x: null, y: null, offset: null };
-        var handoffset = null;
-        var scale = 1;
-        var hand_loc = { x: null, y: null, w: null, h: null };
+        var rendering = {
+            deckoffsetratio: 1 / 20,    // i.e. 20 cards per card width
+            handoffsetratio: 1 / 3,
+            deckanchor: { x: null, y: null, offset: null },
+            handoffset: null,
+            scale: 1,
+            hand_loc: { x: null, y: null, w: null, h: null },
+            offscreen_map: {
+                front: { x: null, y: null },
+                back: { x: null, y: null },
+            },
+            cardwidth: null,
+            cardheight: null,
+            cardbacktruncwidth: null
+        };
         // =========================================================
         function suit(card) {
             var index = CARDS.findIndex((c) => c === card);
@@ -195,14 +205,6 @@
         function rank(card) {
             var index = CARDS.findIndex((c) => c === card);
             return index % 13;
-        }
-        function card2svgelem(card) {
-            if (card == CARDBACK) {
-                return document.getElementById("card-cardback");
-            }
-            else {
-                return document.getElementById("card-" + suit(card).toLowerCase() + '-' + (rank(card) + 1));
-            }
         }
         function shuffle(array) {
             // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -229,7 +231,7 @@
             game.discarded = [];
             // display initial setup
             hide_help();
-            show_game();
+            render();
         }
         function show_help() {
             var div = document.getElementById("gameend");
@@ -246,11 +248,82 @@
         function share_game(game) {
             return game.hand.join("");
         }
-        function show_game() {
+        function draw() {
+            console.debug("drawing");
+            game.hand = game.hand.concat(game.deck.slice(0, 1));
+            game.deck = game.deck.slice(1);
+            game.moves += 1;
+            render();
+        }
+        function undo_draw() {
+            // undo the last draw
+            game.deck = [game.hand.at(-1)].concat(game.deck);
+            game.hand = game.hand.slice(0, -1);
+            game.moves += 1;
+            render();
+        }
+        function discard2() {
+            // look at last four
+            card1 = game.hand.at(-4);
+            card2 = game.hand.at(-1);
+            console.debug("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            if (card1 != undefined && card2 != undefined && suit(card1) == suit(card2)) {
+                game.discarded = game.discarded.concat(game.hand.slice(-3, -1));
+                game.hand.splice(-3, 2);
+                game.moves += 1;
+                render();
+            }
+        }
+        function discard4() {
+            // look at last four
+            card1 = game.hand.at(-4);
+            card2 = game.hand.at(-1);
+            console.debug("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
+            if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
+                game.discarded = game.discarded.concat(game.hand.slice(-4));
+                game.hand.splice(-4, 4);
+                game.moves += 1;
+                render();
+            }
+        }
+        function could_discard() {
+            card1 = game.hand.at(-4);
+            card2 = game.hand.at(-1);
+            if (card1 != undefined && card2 != undefined)
+                return suit(card1) == suit(card2) || rank(card1) == rank(card2);
+            else
+                return false;
+        }
+        function check_win() {
+            // if game is over, return score (golf rules). else, return null
+            if (game.deck != null && game.deck.length == 0 && !could_discard()) {
+                // game is over
+                return game.hand.length;
+            }
+            return null;
+        }
+        // ====================================================== RENDERING =======================
+        function getMousePos(canvas, evt) {
+            // https://stackoverflow.com/a/17130415
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: (evt.clientX - rect.left) * window.devicePixelRatio,
+                y: (evt.clientY - rect.top) * window.devicePixelRatio
+            };
+        }
+        function card2svgelem(card) {
+            if (card == CARDBACK) {
+                return document.getElementById("card-cardback");
+            }
+            else {
+                return document.getElementById("card-" + suit(card).toLowerCase() + '-' + (rank(card) + 1));
+            }
+        }
+        function render() {
             console.debug("show_game");
             if (game.hand == null || game.deck == null) { return; }
             CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
-            hand_loc = { x: null, y: null, w: null, h: null };
+            rendering.hand_loc = { x: null, y: null, w: null, h: null };
             var win = check_win();
             if (win != null) {
                 var div = document.getElementById("gameend");
@@ -274,23 +347,34 @@
                 div.style.display = "block";
             }
             else {
-                var x = deckanchor.x, y = deckanchor.y;
+                var x = Math.floor(rendering.deckanchor.x), y = Math.floor(rendering.deckanchor.y);
                 var backelem = card2svgelem(CARDBACK);
-                var h = backelem.height * scale;
-                var w = backelem.width * scale;
+                var h = rendering.cardheight, w = rendering.cardwidth;
                 // show the discard
                 console.debug("game.discarded: ", game.discarded);
                 for (let index = 0; index < game.discarded.length; index++) {
                     const element = game.discarded[index];
                     var svgelem = card2svgelem(element);
                     CONTEXT.drawImage(svgelem, x, y, w, h);
-                    x = x + deckanchor.offset;
+                    x = Math.floor(x + rendering.deckanchor.offset);
                 }
                 // show the game.deck
                 console.debug("game.deck: ", game.deck);
                 for (let index = 0; index < game.deck.length; index++) {
-                    CONTEXT.drawImage(backelem, x, y, w, h);
-                    x = x + deckanchor.offset;
+                    if (index == game.deck.length - 1) {
+                        ww = rendering.cardwidth;
+                    }
+                    else {
+                        ww = rendering.cardbacktruncwidth;
+                    }
+                    // sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight
+                    CONTEXT.drawImage(CANVAS.offscreenCanvas,
+                        rendering.offscreen_map.back.x,
+                        rendering.offscreen_map.back.y,
+                        ww, h,
+                        x, y,
+                        ww, h);
+                    x = Math.floor(x + rendering.deckanchor.offset);
                 }
                 // show the game.hand
                 console.debug("game.hand: ", game.hand);
@@ -299,82 +383,20 @@
                     var svgelem = card2svgelem(element);
                     CONTEXT.drawImage(svgelem, x, y, w, h);
                     if (index >= game.hand.length - 4) {
-                        if (hand_loc.x == null) {
-                            hand_loc.x = x;
-                            hand_loc.y = y;
-                            hand_loc.w = w - handoffset;
-                            hand_loc.h = h;
+                        if (rendering.hand_loc.x == null) {
+                            rendering.hand_loc.x = x;
+                            rendering.hand_loc.y = y;
+                            rendering.hand_loc.w = w - rendering.handoffset;
+                            rendering.hand_loc.h = h;
                         }
-                        hand_loc.w += handoffset;
-                        x = x + handoffset;
+                        rendering.hand_loc.w += rendering.handoffset;
+                        x = Math.floor(x + rendering.handoffset);
                     }
                     else {
-                        x = x + deckanchor.offset;
+                        x = Math.floor(x + rendering.deckanchor.offset);
                     }
                 }
             }
-        }
-        function draw() {
-            console.debug("drawing");
-            game.hand = game.hand.concat(game.deck.slice(0, 1));
-            game.deck = game.deck.slice(1);
-            game.moves += 1;
-            show_game();
-        }
-        function undo_draw() {
-            // undo the last draw
-            game.deck = [game.hand.at(-1)].concat(game.deck);
-            game.hand = game.hand.slice(0, -1);
-            game.moves += 1;
-            show_game();
-        }
-        function discard2() {
-            // look at last four
-            card1 = game.hand.at(-4);
-            card2 = game.hand.at(-1);
-            console.debug("discarding inner 2: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
-            if (card1 != undefined && card2 != undefined && suit(card1) == suit(card2)) {
-                game.discarded = game.discarded.concat(game.hand.slice(-3, -1));
-                game.hand.splice(-3, 2);
-                game.moves += 1;
-                show_game();
-            }
-        }
-        function discard4() {
-            // look at last four
-            card1 = game.hand.at(-4);
-            card2 = game.hand.at(-1);
-            console.debug("discarding 4: ", card1, suit(card1), rank(card1), card2, suit(card2), rank(card2));
-            if (card1 != undefined && card2 != undefined && rank(card1) == rank(card2)) {
-                game.discarded = game.discarded.concat(game.hand.slice(-4));
-                game.hand.splice(-4, 4);
-                game.moves += 1;
-                show_game();
-            }
-        }
-        function could_discard() {
-            card1 = game.hand.at(-4);
-            card2 = game.hand.at(-1);
-            if (card1 != undefined && card2 != undefined)
-                return suit(card1) == suit(card2) || rank(card1) == rank(card2);
-            else
-                return false;
-        }
-        function check_win() {
-            // if game is over, return score (golf rules). else, return null
-            if (game.deck != null && game.deck.length == 0 && !could_discard()) {
-                // game is over
-                return game.hand.length;
-            }
-            return null;
-        }
-        function getMousePos(canvas, evt) {
-            // https://stackoverflow.com/a/17130415
-            var rect = canvas.getBoundingClientRect();
-            return {
-                x: (evt.clientX - rect.left) * window.devicePixelRatio,
-                y: (evt.clientY - rect.top) * window.devicePixelRatio
-            };
         }
         function window_resize() {
             CANVAS.width = window.innerWidth * window.devicePixelRatio;
@@ -382,33 +404,53 @@
             CANVAS.style.width = window.innerWidth + "px";
             CANVAS.style.height = window.innerHeight + "px";
             CONTEXT.resetTransform();
-            // for some reason this screws everything up...
+
+            // for some reason this screws everything up... because we are already accounting for this in the "scale" term
             // CONTEXT.scale(window.devicePixelRatio, window.devicePixelRatio);
             var cardbackelem = card2svgelem(CARDBACK);
             if (window.innerWidth < 500) {
-                DECKOFFSETRATIO = 1 / 80;
+                rendering.deckoffsetratio = 1 / 80;
             }
             else {
-                DECKOFFSETRATIO = 1 / 40;
+                rendering.deckoffsetratio = 1 / 40;
             }
-            fullwidthunscaled = cardbackelem.width * (48 * DECKOFFSETRATIO + 3 * HANDOFFSETRATIO + 1);
-            scale = Math.min(
+            fullwidthunscaled = cardbackelem.width * (48 * rendering.deckoffsetratio + 3 * rendering.handoffsetratio + 1);
+            rendering.scale = Math.min(
                 (CANVAS.height / 1.1) / cardbackelem.height,
                 (CANVAS.width / 1.1) / fullwidthunscaled
             );
-            deckanchor.offset = scale * cardbackelem.width * DECKOFFSETRATIO;
-            handoffset = scale * cardbackelem.width * HANDOFFSETRATIO;
-            deckanchor.x = (CANVAS.width - fullwidthunscaled * scale) / 2;
-            deckanchor.y = (CANVAS.height - (cardbackelem.height * scale)) / 2;   // center vertically
-            console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "scale: ", scale, deckanchor, handoffset);
-            show_game();
+            rendering.deckanchor.offset = rendering.scale * cardbackelem.width * rendering.deckoffsetratio;
+            rendering.handoffset = rendering.scale * cardbackelem.width * rendering.handoffsetratio;
+            rendering.deckanchor.x = (CANVAS.width - fullwidthunscaled * rendering.scale) / 2;
+            rendering.deckanchor.y = (CANVAS.height - (cardbackelem.height * rendering.scale)) / 2;   // center vertically
+            console.debug("resizing: size: ", CANVAS.width, CANVAS.height, "rendering.scale: ", rendering.scale, rendering.deckanchor, rendering.handoffset);
+
+            CANVAS.offscreenCanvas.width = CANVAS.width;
+            CANVAS.offscreenCanvas.height = CANVAS.height;
+
+            // prerender the card back and the left edge of a random card;
+            //  record where they are for main render loop
+            let offscreenctx = CANVAS.offscreenCanvas.getContext('2d');
+            rendering.cardwidth = Math.floor(cardbackelem.width * rendering.scale);
+            rendering.cardheight = Math.floor(cardbackelem.height * rendering.scale);
+            offscreenctx.drawImage(cardbackelem, 0, 0, rendering.cardwidth, rendering.cardheight);
+            rendering.offscreen_map['back'] = { x: 0, y: 0 };
+            var frontelem = card2svgelem("🂦");
+            offscreenctx.drawImage(frontelem, rendering.cardwidth, 0, rendering.cardwidth, rendering.cardheight);
+            rendering.offscreen_map['front'] = { x: rendering.cardwidth, y: 0 };
+            rendering.cardbacktruncwidth = Math.floor(rendering.cardwidth * rendering.deckoffsetratio * 3.5);
+
+            render();
         };
         function mouse_down(event) {
             if (event.buttons != 1) { return; }
             var mouse = getMousePos(CANVAS, event);
-            console.debug("mouse down: ", event, mouse, hand_loc);
+            console.debug("mouse down: ", event, mouse, rendering.hand_loc);
             // if click is over hand:
-            if (mouse.x > hand_loc.x && mouse.x < hand_loc.x + hand_loc.w && mouse.y > hand_loc.y && mouse.y < hand_loc.y + hand_loc.h) {
+            if (mouse.x > rendering.hand_loc.x &&
+                mouse.x < rendering.hand_loc.x + rendering.hand_loc.w &&
+                mouse.y > rendering.hand_loc.y &&
+                mouse.y < rendering.hand_loc.y + rendering.hand_loc.h) {
                 discard4();
                 discard2();
             }
