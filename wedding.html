@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/base-min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+    <style>
+        html,
+        body {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        body {
+            color: #666;
+        }
+
+        #main {
+            max-width: 80%;
+            margin-left: 10%;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #111;
+        }
+
+        .l-box {
+            padding: 2em;
+        }
+
+        .header .pure-menu {
+            border-bottom-color: black;
+            border-radius: 0;
+        }
+
+        .pure-menu-link {
+            padding: 1em .7em;
+        }
+
+        .photo-box,
+        .text-box {
+            /* overflow: hidden; */
+            position: relative;
+            /* height: 250px; */
+            text-align: center;
+        }
+
+        .photo-box img {
+            max-width: 100%;
+            height: auto;
+            min-height: 250px;
+        }
+
+        .text-box {
+            /* background: rgb(49, 49, 49); */
+            /* bluish grey */
+            /* color: rgb(255, 190, 94); */
+            /* steel blue */
+
+            text-align: center;
+        }
+
+        .footer {
+            background: rgb(255, 255, 255);
+            color: #666;
+            padding: 1em;
+            text-align: right;
+        }
+
+        @media (min-width: 30em) {
+
+            .photo-box,
+            .text-box {
+                text-align: left;
+            }
+
+            .photo-box-thin {
+                height: 250px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="pure-menu pure-menu-horizontal pure-menu-scrollable ">
+            <a class="pure-menu-heading" href="">This is a wedding.</a>
+            <span></span>
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Home</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="http://example.com/" class="pure-menu-link">Registry</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="http://example.com/" class="pure-menu-link">RSVP</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="#map" class="pure-menu-link">Directions</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="#contact" class="pure-menu-link">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="main">
+
+        <div class="pure-g">
+
+            <!-- TODO Images -->
+            <div class="photo-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <img class="pure-img " src="images/desirepath.jpeg">
+            </div>
+
+            <div class="text-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <p>Lorem ipsum was a bear, lorem ipsum had no hare. Lorem ipsum died of hunger-involved parasites.</p>
+                <p> I scream, you scream, We all scream for Lorem ipsum.</p>
+            </div>
+
+            <div class="photo-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <img class="pure-img " src="images/greenhouse.jpeg">
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2931.905864663141!2d-77.45815192447047!3d42.705713971162844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d11148396eb997%3A0x2dd13f69a9ede2bf!2sRMSC%20Cumming%20Nature%20Center!5e0!3m2!1sen!2sus!4v1691850496061!5m2!1sen!2sus"
+                    style="border:0;width:100%;height:100%;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="photo-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <img class="pure-img " src="images/weird.jpeg">
+            </div>
+
+            <div class="text-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                <p>Blah blah blah don't bring your uninvited loved ones or they will be tortured eternally. If anyone
+                    has any dietary restrictions, good! We are so blessed.</p>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- Info + Contact -->
+    <div class="footer" id="contact">
+        <div class="pure-menu pure-menu-horizontal pure-menu-scrollable ">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item">
+                    <a class="pure-menu-link" href="https://rmsc.org/cumming-nature-center/">Venue</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a class="pure-menu-link" href="mailto:ndileas@gmail.com,sarah.a.kohlmeier@gmail.com">Email Us</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a class="pure-menu-link" href="tel:+19856552500">Call Us</a>
+                </li>
+                <li class="pure-menu-item">
+                    <p>Copyright Nathan Dileas 2023. Image Credit: T. Scheueueurman </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TODO Cutesy Text about how we met or whatever. -->
+
+    <!-- Links -->
+    <!-- TODO Registry -->
+    <!-- TODO RSVP (Google Survey?) -->
+    <!-- TODO Dates -->
+
+
+</body>
+
+</html>
