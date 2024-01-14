@@ -17,7 +17,7 @@
         }
 
         body {
-            color: #666;
+            color: #555;
         }
 
         #main {
@@ -39,12 +39,25 @@
         }
 
         .header .pure-menu {
-            border-bottom-color: black;
-            border-radius: 0;
+
+            background-color: rgb(69, 97, 89);
+            color: rgb(244, 168, 91);
+
+        }
+
+        .header {
+            box-sizing: border-box;
+            border-bottom: 3px solid rgb(173, 76, 59);
         }
 
         .pure-menu-link {
             padding: 1em .7em;
+            color: rgb(244, 168, 91);
+        }
+
+        .pure-menu-heading {
+            color: rgb(244, 168, 91);
+
         }
 
         .photo-box,
@@ -53,6 +66,12 @@
             position: relative;
             /* height: 250px; */
             text-align: center;
+            padding: 1em;
+        }
+
+        /* this keeps the padding of each box from breaking the grid layout */
+        .pure-g>div {
+            box-sizing: border-box;
         }
 
         .photo-box img {
@@ -68,6 +87,7 @@
             /* steel blue */
 
             text-align: center;
+            padding: 1em;
         }
 
         .footer {
@@ -95,17 +115,18 @@
 <body>
     <div class="header">
         <div class="pure-menu pure-menu-horizontal pure-menu-scrollable ">
-            <a class="pure-menu-heading" href="">This is a wedding.</a>
+            <b><a class="pure-menu-heading" href="">Nathan & Ryn</a></b>
             <span></span>
             <ul class="pure-menu-list">
-                <li class="pure-menu-item pure-menu-selected">
+                <li class="pure-menu-item">
                     <a href="#" class="pure-menu-link">Home</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="http://example.com/" class="pure-menu-link">Registry</a>
+                    <a href="https://www.zola.com/registry/him-him" class="pure-menu-link">Registry</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="http://example.com/" class="pure-menu-link">RSVP</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSczsB45qgprMwRFWOz9b8hXSgw1OkEoQh7E6t00hNkGfTvPXw/viewform?usp=sf_link"
+                        class="pure-menu-link">RSVP</a>
                 </li>
                 <li class="pure-menu-item">
                     <a href="#map" class="pure-menu-link">Directions</a>
@@ -126,8 +147,20 @@
             </div>
 
             <div class="text-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-                <p>Lorem ipsum was a bear, lorem ipsum had no hare. Lorem ipsum died of hunger-involved parasites.</p>
-                <p> I scream, you scream, We all scream for Lorem ipsum.</p>
+                <h3>Information</h3>
+                <p>We are so excited to celebrate our wedding with you! Your invitation should have been addressed to
+                    all
+                    members of your party who are invited, but if there are any questions let us know. Below is some
+                    important information about the event.</p>
+
+                <p>Location: RMSC Cumming Nature Center</p>
+                <p>6472 Gulick Rd</p>
+                <p>Naples, NY 14512</p>
+                <p>Date: Saturday, October 26, 2024</p>
+                <p>Time: Ceremony will begin at 2pm and the reception will follow at the same venue.</p>
+
+
+
             </div>
 
             <div class="photo-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
@@ -146,8 +179,26 @@
             </div>
 
             <div class="text-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-                <p>Blah blah blah don't bring your uninvited loved ones or they will be tortured eternally. If anyone
-                    has any dietary restrictions, good! We are so blessed.</p>
+                <h3>Venue</h3>
+                <p>Cumming Nature Center is a nature preserve with hiking trails, so please feel free to bring shoes
+                    which
+                    you can hike the trails in. They will be open to us prior and following the ceremony. The ceremony
+                    and
+                    reception will be taking place outdoors, so dress accordingly. The ceremony is just a short walk
+                    from
+                    the parking lot, but there are wheelchairs at the venue that we can borrow for anyone who requires
+                    assistance. The reception will be in a heated tent which will help with the elements. The nature
+                    center's exhibits and bathrooms are indoors.</p>
+
+                <p>Please note that there is limited cell and data service at the venue. If you require directions to
+                    get
+                    home after the event, we recommend downloading or printing those before traveling down. Usually it
+                    takes
+                    a while to reconnect to service when you leave the venue.</p>
+
+                <p>We are not reserving any hotel space, but if you need any recommendations, we can let you know of a
+                    few
+                    places nearby to the venue.</p>
             </div>
         </div>
 
@@ -163,9 +214,9 @@
                 <li class="pure-menu-item">
                     <a class="pure-menu-link" href="mailto:ndileas@gmail.com,sarah.a.kohlmeier@gmail.com">Email Us</a>
                 </li>
-                <li class="pure-menu-item">
+                <!-- <li class="pure-menu-item">
                     <a class="pure-menu-link" href="tel:+19856552500">Call Us</a>
-                </li>
+                </li> -->
                 <li class="pure-menu-item">
                     <p>Copyright Nathan Dileas 2023. Image Credit: T. Scheueueurman </p>
                 </li>
@@ -176,8 +227,6 @@
     <!-- TODO Cutesy Text about how we met or whatever. -->
 
     <!-- Links -->
-    <!-- TODO Registry -->
-    <!-- TODO RSVP (Google Survey?) -->
     <!-- TODO Dates -->
 
 
