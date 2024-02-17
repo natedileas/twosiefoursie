@@ -1,0 +1,97 @@
+html,
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body {
+    color: #555;
+}
+
+#main {
+    max-width: 80%;
+    margin-left: 10%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #111;
+}
+
+.l-box {
+    padding: 2em;
+}
+
+.header .pure-menu {
+
+    background-color: rgb(69, 97, 89);
+    color: rgb(244, 168, 91);
+
+}
+
+.header {
+    box-sizing: border-box;
+    border-bottom: 3px solid rgb(173, 76, 59);
+}
+
+.pure-menu-link {
+    padding: 1em .7em;
+    color: rgb(244, 168, 91);
+}
+
+.pure-menu-heading {
+    color: rgb(244, 168, 91);
+
+}
+
+.photo-box,
+.text-box {
+    /* overflow: hidden; */
+    position: relative;
+    /* height: 250px; */
+    text-align: center;
+    padding: 1em;
+}
+
+/* this keeps the padding of each box from breaking the grid layout */
+.pure-g>div {
+    box-sizing: border-box;
+}
+
+.photo-box img {
+    max-width: 100%;
+    height: auto;
+    /* min-height: 250px; */
+}
+
+.text-box {
+    /* background: rgb(49, 49, 49); */
+    /* bluish grey */
+    /* color: rgb(255, 190, 94); */
+    /* steel blue */
+
+    text-align: center;
+    padding: 1em;
+}
+
+.footer {
+    background: rgb(255, 255, 255);
+    color: #666;
+    padding: 1em;
+    text-align: right;
+}
+
+@media (min-width: 30em) {
+
+    .photo-box,
+    .text-box {
+        text-align: left;
+    }
+
+    .photo-box-thin {
+        height: 250px;
+    }
+}
